@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Application from "./components/Application";
 import svg from "/src/images/noApplication.svg";
 
@@ -199,7 +199,7 @@ const App = () => {
 
     if (sectionApplications.length === 0) {
       return (
-        <div className="flex flex-col items-center pt-20 h-full">
+        <div className="flex flex-col items-center pt-20 ">
           <img src={svg} alt="svg" />
           <p className="text-gray-500 mt-2 text-center">
             Если есть подходящие заявки, перетащите их сюда 🤓
@@ -226,7 +226,7 @@ const App = () => {
       <h1 className="text-2xl mb-5 pt-5">
         Applications {data.length ? data.length : 0}
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 h-[100vh]">
         {["new", "current", "closed", "archive"].map((section) => (
           <div
             key={section}
