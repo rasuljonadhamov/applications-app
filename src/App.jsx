@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Application from "./components/Application";
+import svg from "/src/images/noApplication.svg";
 
 const data = [
   {
@@ -191,38 +192,56 @@ const App = () => {
     setApplications(updatedApplications);
   };
 
-  const renderApplications = (section) =>
-    applications
-      .filter((app) => app.section === section)
-      .map((app) => (
-        <Application
-          key={app.id}
-          id={app.id}
-          title={app.title}
-          desc={app.desc}
-          user={app.user}
-          onDragStart={(e) => handleDragStart(e, app.id)}
-        />
-      ));
+  const renderApplications = (section) => {
+    const sectionApplications = applications.filter(
+      (app) => app.section === section
+    );
+
+    if (sectionApplications.length === 0) {
+      return (
+        <div className="flex flex-col items-center pt-20 h-full">
+          <img src={svg} alt="svg" />
+          <p className="text-gray-500 mt-2 text-center">
+            Если есть подходящие заявки, перетащите их сюда 🤓
+          </p>
+        </div>
+      );
+    }
+
+    return sectionApplications.map((app) => (
+      <Application
+        key={app.id}
+        id={app.id}
+        title={app.title}
+        desc={app.desc}
+        user={app.user}
+        onDragStart={(e) => handleDragStart(e, app.id)}
+      />
+    ));
+  };
 
   return (
-    <div className="px-10 border-t-[44px] border-[#2EA97D] bg[#F0F0F0]">
+    <div className="px-4 sm:px-6 lg:px-8 border-t-[44px] border-[#2EA97D] bg-[#F0F0F0]">
       <div className="h-6"></div>
-      <h1 className="text-2xl mb-5 pt-5">Applications {data.length}</h1>
-      <div className="flex">
+      <h1 className="text-2xl mb-5 pt-5">
+        Applications {data.length ? data.length : 0}
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {["new", "current", "closed", "archive"].map((section) => (
           <div
             key={section}
-            className={`w-1/4 p-4 border ${
-              section === "archive" ? "mb-3" : "mr-4"
-            } border-t-[40px] border-[#F2FAF6]`}
+            className={`w-full p-4 border ${
+              section === "archive" ? "mb-3" : ""
+            } border-t-[40px] border-[#F2FAF6] overflow-y-auto`}
             onDragOver={handleDragOver}
             onDrop={handleDrop(section)}
           >
-            <h2 className="text-sm font-medium mb-4 -mt-[2.75rem]">
-              {`${section.charAt(0).toUpperCase()}${section.slice(
-                1
-              )} Applications ${renderApplications(section).length}`}
+            <h2 className="text-sm font-medium mb-4 -mt-3 text-black ">
+              {`${section.charAt(0).toUpperCase()}${section.slice(1)} : ${
+                renderApplications(section).length
+                  ? renderApplications(section).length
+                  : 0
+              }`}
             </h2>
             {renderApplications(section)}
           </div>
